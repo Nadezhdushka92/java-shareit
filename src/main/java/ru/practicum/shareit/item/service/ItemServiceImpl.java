@@ -14,7 +14,6 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.item.dto.mapper.ItemMapper.*;
 
@@ -26,12 +25,12 @@ public class ItemServiceImpl implements ItemService {
     private final UserService userService;
 
     @Override
-    public List<ItemDto> getItemsByUserId(Long userId) {
+    public List<ItemDto> getItemsByUserId(long userId) {
         checkUserById(userId);
-        log.debug("Получение списка всех Items юзера с id:{}", userId);
+        log.info("Получение списка всех Items юзера с id:{}", userId);
         return itemRepository.findItemsByUserId(userId).stream()
                 .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -46,16 +45,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItemById(Long userId, Long itemId) {
+    public ItemDto getItemById(long userId, long itemId) {
         checkUserById(userId);
         checkItemById(itemId);
-        log.debug("Поиск вещи c id:{} владелец с id: {}", itemId, userId);
+        log.info("Поиск вещи c id:{} владелец с id: {}", itemId, userId);
         return toItemDto(itemRepository.findItemById(itemId));
     }
 
     @Override
-    public ItemDto saveItem(Long userId, ItemDto itemDto) {
-        log.info("Добавление item. Id юзера:{} , item:{}", userId, itemDto);
+    public ItemDto saveItem(long userId, ItemDto itemDto) {
+        log.info("Добавление item : {}; Владелец: {}", itemDto, userId);
         checkUserById(userId);
         if (itemDto.getAvailable() == null || itemDto.getDescription() == null || itemDto.getName() == null) {
             throw new EmptyException("Null в ItemDto");
@@ -63,25 +62,24 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getName().isEmpty() || itemDto.getDescription().isEmpty()) {
             throw new EmptyException("Empty в ItemDto");
         }
-        log.debug("Создание item : {}; for user {}", itemDto, userId);
         return toItemDto(itemRepository.save(userId, toItem(itemDto)));
     }
 
     @Override
-    public ItemDto update(Long userId, ItemDto item) {
+    public ItemDto update(long userId, ItemDto item) {
         checkUserById(userId);
         checkItemById(item.getId());
-        log.debug("Обновление item : {}; для пользователя {}", item, userId);
+        log.info("Обновление item : {}; для пользователя {}", item, userId);
         return toItemDto(itemRepository.update(userId, toItemUpdate(item, itemRepository
                 .findItemById(item.getId()))));
     }
 
     @Override
-    public void deleteItem(Long userId, Long itemId) {
+    public void deleteItem(long userId, long itemId) {
         itemRepository.deleteByUserIdAndItemId(userId, itemId);
     }
 
-    private void checkUserById(Long userId) {
+    private void checkUserById(long userId) {
         if (userId == -1) {
             throw new ValidationException("Отсутствует пользователь с header-Id : " + userId);
         }
@@ -90,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private void checkItemById(Long itemId) {
+    private void checkItemById(long itemId) {
         if (itemRepository.findItemById(itemId) == null) {
             throw new NotFoundException("Отсутствует вещь с id: " + itemId);
         }

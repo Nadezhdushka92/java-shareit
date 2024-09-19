@@ -12,7 +12,6 @@ import java.util.*;
 public class UserRepositoryImpl implements UserRepository {
     private final Map<Long, User> users = new HashMap<>();
     private final Set<String> uniqueEmails = new HashSet<>();
-    private long userId = 0;
 
     @Override
     public List<User> findAll() {
@@ -21,9 +20,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        user.setId(++userId); //(long) users.size() + 1
+        user.setId((long) users.size() + 1);
         if (!uniqueEmails.add(user.getEmail())) {
-            --userId;
             throw new DublicateException("Email уже используется");
         }
         users.put(user.getId(), user);
@@ -51,7 +49,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void delete(long id) {
-        log.debug("Удаление пользователя с id : {}", id);
         uniqueEmails.remove(users.get(id).getEmail());
         users.remove(id);
     }

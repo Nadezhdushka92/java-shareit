@@ -12,7 +12,7 @@ public interface ItemRepository {
 
     Item save(long userId, Item item);
 
-    Item update(Long userId, Item item);
+    Item update(long userId, Item item);
 
     List<Item> getItemsBySearch(String text);
 

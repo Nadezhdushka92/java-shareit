@@ -21,23 +21,23 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestBody ItemDto itemDto, HttpServletRequest request) {
-        return itemService.saveItem((long) request.getIntHeader("X-Sharer-User-Id"), itemDto);
+        return itemService.saveItem(request.getIntHeader("X-Sharer-User-Id"), itemDto);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@PathVariable long itemId, @RequestBody ItemDto itemDto, HttpServletRequest request) {
         itemDto.setId(itemId);
-        return itemService.update((long) request.getIntHeader("X-Sharer-User-Id"), itemDto);
+        return itemService.update(request.getIntHeader("X-Sharer-User-Id"), itemDto);
     }
 
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@PathVariable long itemId, HttpServletRequest request) {
-        return itemService.getItemById(itemId, (long) request.getIntHeader("X-Sharer-User-Id"));
+        return itemService.getItemById(request.getIntHeader("X-Sharer-User-Id"), itemId);
     }
 
     @GetMapping()
     public List<ItemDto> getUserItems(HttpServletRequest request) {
-        return itemService.getItemsByUserId((long) request.getIntHeader("X-Sharer-User-Id"));
+        return itemService.getItemsByUserId(request.getIntHeader("X-Sharer-User-Id"));
     }
 
     @GetMapping("/search")

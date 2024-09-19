@@ -22,7 +22,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        log.debug("Поиск пользователей: ");
+        log.info("Поиск пользователей: ");
         return repository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
@@ -33,14 +33,14 @@ class UserServiceImpl implements UserService {
         if (user.getEmail() == null) {
             throw new EmptyException("Email пустой");
         }
-        log.debug("Добавление пользователя : {}", user);
+        log.info("Добавление пользователя : {}", user);
         return  toUserDto(repository.save(toUser(user)));
     }
 
     @Override
     public UserDto getUserById(long id) {
         checkUserById(id);
-        log.debug("Поиск пользователя с Id: {}", id);
+        log.info("Поиск пользователя с Id: {}", id);
         return toUserDto(repository.getById(id));
     }
 
@@ -55,11 +55,11 @@ class UserServiceImpl implements UserService {
     @Override
     public void delete(long id) {
         checkUserById(id);
-        log.debug("Deleting user by id: {}", id);
+        log.info("Удаление пользователя с id : {}", id);
         repository.delete(id);
     }
 
-    private void checkUserById(Long userId) {
+    private void checkUserById(long userId) {
         if (repository.getById(userId) == null) {
             throw new ValidationException("Отсутствует пользователь с id: " + userId);
         }

@@ -31,12 +31,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item findItemById(long itemId) {
-        log.debug("Поиск item с id: {} ", itemId);
-        Item item = null;
-        for (long userId : userItems.keySet()) {
-            item = userItems.get(userId).stream().filter(items -> items.getId() == itemId).findFirst().orElse(null);
+        log.info("Поиск item с id: {} ", itemId);
+        for (List<Item> items : userItems.values()) {
+            for (Item item : items) {
+                if (item.getId() == itemId) {
+                    return item;
+                }
+            }
         }
-        return item;
+        return null;
     }
 
     @Override
@@ -50,19 +53,17 @@ public class ItemRepositoryImpl implements ItemRepository {
             userItems.add(item);
             return userItems;
         });
-        log.debug("Добавление item: {}", item);
-        int index = findItemIndexInList(itemId, userId);
+        int index = findItemIndexInList(userId, itemId);
         return userItems.get(userId).get(index);
     }
 
     @Override
-    public Item update(Long userId, Item item) {
-        log.debug("Обновление item : {}", item);
+    public Item update(long userId, Item item) {
         if (!Objects.equals(userId, item.getOwner().getId())) {
             throw new NotFoundException("Владелец некорректный");
         }
 
-        int index = findItemIndexInList(itemId, userId);
+        int index = findItemIndexInList(userId, itemId);
         userItems.get(userId).set(index, item);
         return userItems.get(userId).get(index);
     }
@@ -88,9 +89,9 @@ public class ItemRepositoryImpl implements ItemRepository {
         }
     }
 
-    private int findItemIndexInList(long itemId, long userId) {
+    private int findItemIndexInList(long userId, long itemId) {
         return IntStream.range(0, userItems.get(userId).size())
-                .filter(i -> userItems.get(userId).get(i).getId() == itemId)
+                .filter(ui -> userItems.get(userId).get(ui).getId() == itemId)
                 .findFirst()
                 .orElse(-1);
     }
