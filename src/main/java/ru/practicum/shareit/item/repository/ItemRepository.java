@@ -9,9 +9,11 @@ public interface ItemRepository {
     List<Item> findItemsByUserId(long userId);
 
     Item findItemById(long itemId);
+
     Item save(long userId, Item item);
 
     Item update(Long userId, Item item);
+
     List<Item> getItemsBySearch(String text);
 
     void deleteByUserIdAndItemId(long userId, long itemId);

@@ -15,6 +15,7 @@ public class ItemMapper {
                 .request(item.getRequest())
                 .build();
     }
+
     public static Item toItem(ItemDto itemDto) {
         return Item.builder()
                 .id(itemDto.getId() != null ? itemDto.getId() : 0)

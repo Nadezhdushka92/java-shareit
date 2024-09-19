@@ -28,7 +28,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse ValidationException(ValidationException e) {
+    public ErrorResponse validationException(ValidationException e) {
         return new ErrorResponse("Ошибка валидации %s", e.getMessage());
     }
 }

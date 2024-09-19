@@ -25,7 +25,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 //    }
 
     @Override
-    public List<Item> findItemsByUserId(long id){
+    public List<Item> findItemsByUserId(long id) {
         return userItems.getOrDefault(id, new ArrayList<>());
     }
 
@@ -40,7 +40,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Item save(long userId, Item item){
+    public Item save(long userId, Item item) {
         item.setId(++itemId); //item.size()+1
         item.setOwner((userRepository.getById(userId)));
         userItems.compute(userId, (ownerId, userItems) -> {
