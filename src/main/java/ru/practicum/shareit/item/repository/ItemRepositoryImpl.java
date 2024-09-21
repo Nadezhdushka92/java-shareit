@@ -16,13 +16,6 @@ import java.util.stream.IntStream;
 public class ItemRepositoryImpl implements ItemRepository {
     private final UserRepository userRepository;
     private final Map<Long, List<Item>> userItems = new HashMap<>();
-    private long itemId = 0;
-
-//    @Autowired
-//    public ItemRepositoryImpl(@Lazy UserRepository userRepository, @Lazy ItemRepository itemRepository) {
-//        this.userRepository = userRepository;
-//        this.itemRepository = itemRepository;
-//    }
 
     @Override
     public List<Item> findItemsByUserId(long id) {
@@ -44,7 +37,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item save(long userId, Item item) {
-        item.setId(++itemId); //item.size()+1
+        item.setId((long) userItems.size() + 1);
         item.setOwner((userRepository.getById(userId)));
         userItems.compute(userId, (ownerId, userItems) -> {
             if (userItems == null) {
@@ -53,7 +46,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             userItems.add(item);
             return userItems;
         });
-        int index = findItemIndexInList(userId, itemId);
+        int index = findItemIndexInList(userId, userItems.size());
         return userItems.get(userId).get(index);
     }
 
@@ -63,7 +56,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             throw new NotFoundException("Владелец некорректный");
         }
 
-        int index = findItemIndexInList(userId, itemId);
+        int index = findItemIndexInList(userId, userItems.size());
         userItems.get(userId).set(index, item);
         return userItems.get(userId).get(index);
     }
