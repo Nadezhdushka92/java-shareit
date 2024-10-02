@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto addBooking(BookingDto bookingDto, Long bookerId) {
         UserDto userFromDb = checkUserById(bookerId);
         Item itemFromDb = itemRepository.findById(bookingDto.getItemId())
-                .orElseThrow(() -> new EntityNotFoundException("Отсутсвует вещь с id " + bookingDto.getItemId()));
+                .orElseThrow(() -> new NotFoundException("Отсутсвует вещь с id " + bookingDto.getItemId()));
 
         if (itemFromDb.getOwner().getId() == bookerId) {
             throw new EntityNotFoundException("Это не владелец вещи");
@@ -183,7 +183,7 @@ public class BookingServiceImpl implements BookingService {
         if (userId  < 1) {
             throw new IncorrectDataException("Отсутствует пользователь с header-Id : " + userId);
         }
-        return toUserDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Отсутвует пользователь с id: " + userId)));
+        return toUserDto(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Отсутвует пользователь с id: " + userId)));
     }
 
     private void checkBookingState(String state) {

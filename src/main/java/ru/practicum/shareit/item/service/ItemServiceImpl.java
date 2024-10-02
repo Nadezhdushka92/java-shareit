@@ -7,26 +7,28 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.EmptyException;
 import ru.practicum.shareit.exception.IncorrectDataException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.dto.comment.CommentMapper;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.comment.Comment;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.item.dto.mapper.ItemMapper;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.item.dto.comment.CommentMapper.toCommentDto;
 import static ru.practicum.shareit.item.dto.mapper.ItemMapper.*;
 import static ru.practicum.shareit.user.dto.mapper.UserMapper.toUser;
 import static ru.practicum.shareit.user.dto.mapper.UserMapper.toUserDto;
@@ -105,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
                     .orElseThrow(() -> new EntityNotFoundException("Отсутствует вещь с Id: " + itemId)), commentsForItem);
         } else {
             return toItemDto(itemRepository.findById(itemId)
-                    .orElseThrow(() -> new EntityNotFoundException("Отсутствует вещь с Id: " + itemId)));
+                    .orElseThrow(() -> new NotFoundException("Отсутствует вещь с Id: " + itemId)));
         }
     }
 
@@ -149,20 +151,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addCommentToItem(Long userId, Long itemId, CommentDto commentDto) {
-        if (commentDto.getText().isEmpty()) {
-            throw new ValidationException("Текст отзыва не может быть Empty");
+        User author = userRepository.findById(userId).orElseThrow(() -> {
+            log.info("Отсутствует автор с id:{}", userId);
+            return new ValidationException("Отсутсвует автор с id: " + userId);
+        });
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> {
+            log.info("Отсутсвует вещь с id:{}", itemId);
+            return new NotFoundException("Отсутсвует вещь с id: " + itemId);
+        });
+        Booking booking = bookingRepository.findByBookerId(userId).orElseThrow(() -> {
+            log.info("У автора с id:{}, нет букинга", userId);
+            return new NotFoundException("У автора нет букинга");
+        });
+
+        if (booking.getStart().isAfter(LocalDateTime.now()) || booking.getEnd().isAfter(LocalDateTime.now())) {
+            log.info("Срок аренды вещи еще не окончен");
+            throw new ValidationException("Срок аренды вещи еще не окончен");
         }
-        UserDto author = checkUserById(userId);
-        List<BookingDto> bookings = bookingRepository.findAllByUserIdAndItemIdAndEndDateIsPassed(userId, itemId, LocalDateTime.now())
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .toList();
-        if (bookings.isEmpty()) {
-            throw new ValidationException("Данный пользователь не арендовывал вещь");
-        }
-        ItemDto item = getItemById(userId, itemId);
-        commentDto = toCommentDto(commentRepository.save(CommentMapper.toCommentDb(commentDto, toUser(author), toItem(item))));
-        return commentDto;
+        commentDto.setCreated(LocalDateTime.now());
+        Comment comment = commentRepository.save(CommentMapper.toCommentDb(commentDto, author, item));
+        return CommentMapper.toCommentDto(comment);
     }
 
     private UserDto checkUserById(long userId) {

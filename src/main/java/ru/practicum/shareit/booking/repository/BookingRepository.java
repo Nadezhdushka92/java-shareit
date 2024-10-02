@@ -9,9 +9,11 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+    Optional<Booking> findByBookerId(Long bookerId);
 
     List<Booking> findAllByBooker_Id(Long bookerId, Sort sort);
 
