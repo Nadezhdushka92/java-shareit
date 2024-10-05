@@ -12,7 +12,6 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.IncorrectDataException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.UnsupportedDataException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -70,20 +69,15 @@ public class BookingServiceImpl implements BookingService {
             throw new EntityNotFoundException("Пользователь с id = " + ownerId + " не владелец");
         }
 
-        switch (approve.toLowerCase()) {
-            case "true": {
-                if (bookingDto.getStatus().equals(BookingStatus.APPROVED)) {
-                    throw new IncorrectDataException("Статус Approved");
-                }
-                bookingDto.setStatus(BookingStatus.APPROVED);
-                break;
+        if (approve.equalsIgnoreCase("true")) {
+            if (bookingDto.getStatus().equals(BookingStatus.APPROVED)) {
+                throw new IncorrectDataException("Статус Approved");
             }
-            case "false": {
-                bookingDto.setStatus(BookingStatus.REJECTED);
-                break;
-            }
-            default:
-                throw new IncorrectDataException("Некорректные данные");
+            bookingDto.setStatus(BookingStatus.APPROVED);
+        } else if (approve.equalsIgnoreCase("false")) {
+            bookingDto.setStatus(BookingStatus.REJECTED);
+        } else {
+            throw new IncorrectDataException("Некорректные данные");
         }
         Booking bookingToUpdate = toBookingUpdate(bookingDto, bookingRepository.findById(bookingId).get());
         bookingRepository.save(bookingToUpdate);
@@ -102,32 +96,31 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getAllBookingsByUserId(Long userId, String state) {
+    public List<BookingDto> getAllBookingsByUserId(Long userId, BookingState state) {
         checkUserById(userId);
-        checkBookingState(state);
         List<Booking> bookings;
-        switch (state.toUpperCase()) {
-            case "WAITING": {
+        switch (state) {
+            case BookingState.WAITING: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndWaitingStatus(userId, BookingStatus.WAITING, SORT_BY_START_DESC));
                 break;
             }
-            case "REJECTED": {
+            case BookingState.REJECTED: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndRejectedStatus(userId, List.of(BookingStatus.REJECTED, BookingStatus.CANCELED), SORT_BY_START_DESC));
                 break;
             }
-            case "CURRENT": {
+            case BookingState.CURRENT: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndCurrentStatus(userId, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "FUTURE": {
+            case BookingState.FUTURE: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndFutureStatus(userId, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "PAST": {
+            case BookingState.PAST: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndPastStatus(userId, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "ALL": {
+            case BookingState.ALL: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBooker_Id(userId, SORT_BY_START_DESC));
                 break;
             }
@@ -138,38 +131,37 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getAllBookingsByOwnerId(Long ownerId, String state) {
+    public List<BookingDto> getAllBookingsByOwnerId(Long ownerId, BookingState state) {
         checkUserById(ownerId);
-        checkBookingState(state);
         List<Long> userItemsIds = itemRepository.findByOwner_Id(ownerId, Sort.by(Sort.Direction.ASC, "id")).stream()
                 .map(Item::getId)
                 .collect(Collectors.toList());
         if (userItemsIds.isEmpty()) {
-            throw new IncorrectDataException("Этот метода только для тех кто имеет >1 вещи");
+            throw new IncorrectDataException("Этот метод только для тех кто имеет >1 вещи");
         }
         List<Booking> bookings;
-        switch (state.toUpperCase()) {
-            case "WAITING": {
+        switch (state) {
+            case BookingState.WAITING: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItemsAndWaitingStatus(userItemsIds, BookingStatus.WAITING, SORT_BY_START_DESC));
                 break;
             }
-            case "REJECTED": {
+            case BookingState.REJECTED: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItemsAndRejectedStatus(userItemsIds, List.of(BookingStatus.REJECTED, BookingStatus.CANCELED), SORT_BY_START_DESC));
                 break;
             }
-            case "CURRENT": {
+            case BookingState.CURRENT: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItemsAndCurrentStatus(userItemsIds, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "FUTURE": {
+            case BookingState.FUTURE: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItemsAndFutureStatus(userItemsIds, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "PAST": {
+            case BookingState.PAST: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItemsAndPastStatus(userItemsIds, LocalDateTime.now(), SORT_BY_START_DESC));
                 break;
             }
-            case "ALL": {
+            case BookingState.ALL: {
                 bookings = new ArrayList<>(bookingRepository.findAllByOwnerItems(userItemsIds, SORT_BY_START_DESC));
                 break;
             }
@@ -180,17 +172,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private UserDto checkUserById(Long userId) {
-        if (userId  < 1) {
+        if (userId < 1) {
             throw new IncorrectDataException("Отсутствует пользователь с header-Id : " + userId);
         }
         return toUserDto(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Отсутвует пользователь с id: " + userId)));
     }
 
-    private void checkBookingState(String state) {
-        try {
-            BookingState.valueOf(state);
-        } catch (Exception e) {
-            throw new UnsupportedDataException(state);
-        }
-    }
 }
