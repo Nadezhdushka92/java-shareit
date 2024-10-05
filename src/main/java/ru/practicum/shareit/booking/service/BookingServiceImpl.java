@@ -102,6 +102,7 @@ public class BookingServiceImpl implements BookingService {
         switch (state) {
             case BookingState.WAITING: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndWaitingStatus(userId, BookingStatus.WAITING, SORT_BY_START_DESC));
+                break;
             }
             case BookingState.REJECTED: {
                 bookings = new ArrayList<>(bookingRepository.findAllByBookerIdAndRejectedStatus(userId, List.of(BookingStatus.REJECTED, BookingStatus.CANCELED), SORT_BY_START_DESC));
