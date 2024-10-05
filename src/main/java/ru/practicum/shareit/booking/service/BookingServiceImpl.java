@@ -101,11 +101,11 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookings;
         switch (state) {
             case BookingState.WAITING: {
-                bookings = new ArrayList<>(bookingRepository.findAllByItem_Booker_IdAndStatusOrderByStartDesc(userId, BookingStatus.WAITING));
+                bookings = new ArrayList<>(bookingRepository.findAllByItem_Booker_IdAndStatusOrderByStartDesc(userId, BookingStatus.valueOf("WAITING")));
                 break;
             }
             case BookingState.REJECTED: {
-                bookings = new ArrayList<>(bookingRepository.findAllByItem_Booker_IdAndStatusOrderByStartDesc(userId, BookingStatus.REJECTED));
+                bookings = new ArrayList<>(bookingRepository.findAllByItem_Booker_IdAndStatusOrderByStartDesc(userId, BookingStatus.valueOf("REJECTED")));
                 break;
             }
             case BookingState.CURRENT: {
@@ -146,7 +146,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
             }
             case BookingState.REJECTED: {
-                bookings = new ArrayList<>(bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStartDesc(ownerId,BookingStatus.valueOf("REJECTED")));
+                bookings = new ArrayList<>(bookingRepository.findAllByItem_Owner_IdAndStatusOrderByStartDesc(ownerId, BookingStatus.valueOf("REJECTED")));
                 break;
             }
             case BookingState.CURRENT: {
