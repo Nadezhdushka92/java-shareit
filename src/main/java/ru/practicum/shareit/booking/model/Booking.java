@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"item", "booker"})
 @Entity
 @Table(name = "bookings")
 @NoArgsConstructor
