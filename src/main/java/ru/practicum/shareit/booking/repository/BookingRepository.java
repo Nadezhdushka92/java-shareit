@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
@@ -26,21 +28,22 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByItem_Owner_IdAndStartAfterOrderByStartDesc(Long ownerId, LocalDateTime now);
 
     //PAST
-    List<Booking> findAllByItem_Owner_IdEndBeforeOrderByStartDesc(Long ownerId, LocalDateTime now);
+    List<Booking> findAllByItem_Owner_IdAndEndBeforeOrderByStartDesc(Long ownerId, LocalDateTime now);
 
-    //ALL
-    List<Booking> findAllByItem_BookerOrderByStartDesc(Long bookerId);
+    List<Booking> findAllByBooker_Id(Long bookerId, Sort sort);
 
-    //STAT Wait, cancel, reject
-    List<Booking> findAllByItem_BookerAndStatusOrderByStartDesc(Long bookerId, BookingStatus status);
+    @Query("select b from Booking b where b.booker.id = :bookerId AND b.status = :waiting")
+    List<Booking> findAllByBookerIdAndWaitingStatus(Long bookerId, BookingStatus waiting, Sort sort);
 
-    //CURRENT
-    List<Booking> findAllByItem_BookerAndStartLessThanEqualAndEndGreaterThanEqualOrderByStartDesc(Long bookerId, LocalDateTime now);
+    @Query("select b from Booking b where b.booker.id = :bookerId AND b.status IN :rejected")
+    List<Booking> findAllByBookerIdAndRejectedStatus(Long bookerId, List<BookingStatus> rejected, Sort sort);
 
-    //FUTURE
-    List<Booking> findAllByItem_BookerAndStartAfterOrderByStartDesc(Long bookerId, LocalDateTime now);
+    @Query("select b from Booking b where b.booker.id = :bookerId AND b.start < :now AND b.end > :now ")
+    List<Booking> findAllByBookerIdAndCurrentStatus(Long bookerId, LocalDateTime now, Sort sort);
 
-    //PAST
-    List<Booking> findAllByItem_BookerEndBeforeOrderByStartDesc(Long bookerId, LocalDateTime now);
+    @Query("select b from Booking b where b.booker.id = :bookerId AND b.start > :now ")
+    List<Booking> findAllByBookerIdAndFutureStatus(Long bookerId, LocalDateTime now, Sort sort);
 
+    @Query("select b from Booking b where b.booker.id = :bookerId AND b.end < :now")
+    List<Booking> findAllByBookerIdAndPastStatus(Long bookerId, LocalDateTime now, Sort sort);
 }
