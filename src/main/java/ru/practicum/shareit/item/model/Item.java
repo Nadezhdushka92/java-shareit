@@ -10,7 +10,7 @@ import java.util.Objects;
 @Table(name = "items")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"owner"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
