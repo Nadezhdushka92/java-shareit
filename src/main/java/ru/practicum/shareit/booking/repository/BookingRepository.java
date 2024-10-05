@@ -30,20 +30,26 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     //PAST
     List<Booking> findAllByItem_Owner_IdAndEndBeforeOrderByStartDesc(Long ownerId, LocalDateTime now);
 
+    //ALL
     List<Booking> findAllByBooker_Id(Long bookerId, Sort sort);
 
+    //STAT Wait, cancel, reject
     @Query("select b from Booking b where b.booker.id = :bookerId AND b.status = :waiting")
     List<Booking> findAllByBookerIdAndWaitingStatus(Long bookerId, BookingStatus waiting, Sort sort);
 
+    //STAT Wait, cancel, reject
     @Query("select b from Booking b where b.booker.id = :bookerId AND b.status IN :rejected")
     List<Booking> findAllByBookerIdAndRejectedStatus(Long bookerId, List<BookingStatus> rejected, Sort sort);
 
+    //CURRENT
     @Query("select b from Booking b where b.booker.id = :bookerId AND b.start < :now AND b.end > :now ")
     List<Booking> findAllByBookerIdAndCurrentStatus(Long bookerId, LocalDateTime now, Sort sort);
 
+    //FUTURE
     @Query("select b from Booking b where b.booker.id = :bookerId AND b.start > :now ")
     List<Booking> findAllByBookerIdAndFutureStatus(Long bookerId, LocalDateTime now, Sort sort);
 
+    //PAST
     @Query("select b from Booking b where b.booker.id = :bookerId AND b.end < :now")
     List<Booking> findAllByBookerIdAndPastStatus(Long bookerId, LocalDateTime now, Sort sort);
 }
