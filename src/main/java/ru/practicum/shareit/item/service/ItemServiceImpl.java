@@ -48,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<Item> userItems = new ArrayList<>(itemRepository.findByOwner_Id(userFromDb.getId(), Sort.by(Sort.Direction.ASC, "id")));
         List<CommentDto> commentsToUserItems = commentRepository.findAllByItemsUserId(userId, Sort.by(Sort.Direction.DESC, "created"))
-                .stream().map(CommentMapper::toCommentDto).collect(Collectors.toList());
+                .stream().map(CommentMapper::toCommentDto).toList();
         List<BookingDto> bookingsToUserItems = getOwnerBooking(userId);
 
         Map<Item, List<BookingDto>> itemsWithBookingsMap = new HashMap<>();
@@ -187,7 +187,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private List<BookingDto> getOwnerBooking(Long ownerId) {
-        return bookingRepository.findAllByItem_Owner_Id(ownerId)
+        return bookingRepository.findAllByItem_Owner_IdOrderByStartDesc(ownerId)
                 .stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
