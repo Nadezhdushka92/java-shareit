@@ -31,4 +31,16 @@ public class ErrorHandler {
     public ErrorResponse handleValidationException(ValidationException e) {
         return new ErrorResponse("Ошибка валидации %s", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIncorrectException(IncorrectDataException e) {
+        return new ErrorResponse("Некорректные данные %s", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUnsupportedException(UnsupportedDataException e) {
+        return new ErrorResponse("Неподдерживаемые данные %s", e.getMessage());
+    }
 }
