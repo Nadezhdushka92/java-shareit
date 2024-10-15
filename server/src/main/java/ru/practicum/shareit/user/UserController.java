@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UpdateUserRqDto;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final ru.practicum.shareit.user.UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public List<UserDto> findAll() {

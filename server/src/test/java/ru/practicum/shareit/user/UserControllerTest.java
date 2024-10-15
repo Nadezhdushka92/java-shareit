@@ -14,6 +14,8 @@ import ru.practicum.shareit.user.dto.UpdateUserRqDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -35,7 +37,7 @@ public class UserControllerTest {
     @Mock
     private UserRepository repository;
 
-    private ru.practicum.shareit.user.UserService userService;
+    private UserService userService;
     private UserController controller;
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -47,7 +49,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userService = new ru.practicum.shareit.user.UserServiceImpl(repository);
+        userService = new UserServiceImpl(repository);
         controller = new UserController(userService);
         mvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(ErrorHandler.class).build();
         userDto = new UserDto(1L, "John", "john.doe@mail.com");
