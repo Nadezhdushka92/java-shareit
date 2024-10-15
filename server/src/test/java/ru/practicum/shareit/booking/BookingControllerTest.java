@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.booking.dto.AddBookingRqDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -23,8 +22,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -32,14 +29,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,8 +99,8 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.id", is(booking.getId()), Long.class))
-                .andExpect((ResultMatcher) jsonPath("$.status", is(booking.getStatus().name())));
+                .andExpect(jsonPath("$.id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$.status", is(booking.getStatus().name())));
     }
 
     @Test
@@ -124,8 +121,8 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.id", is(updatedBooking.getId()), Long.class))
-                .andExpect((ResultMatcher) jsonPath("$.status", is(updatedBooking.getStatus().name())));
+                .andExpect(jsonPath("$.id", is(updatedBooking.getId()), Long.class))
+                .andExpect(jsonPath("$.status", is(updatedBooking.getStatus().name())));
     }
 
     @Test
@@ -137,8 +134,8 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.id", is(booking.getId()), Long.class))
-                .andExpect((ResultMatcher) jsonPath("$.status", is(booking.getStatus().name())));
+                .andExpect(jsonPath("$.id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$.status", is(booking.getStatus().name())));
     }
 
     @Test
@@ -150,9 +147,9 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$", hasSize(1)))
-                .andExpect((ResultMatcher) jsonPath("$[0].id", is(booking.getId()), Long.class))
-                .andExpect((ResultMatcher) jsonPath("$[0].status", is(booking.getStatus().name())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$[0].status", is(booking.getStatus().name())));
     }
 
     @Test
@@ -164,8 +161,8 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$", hasSize(1)))
-                .andExpect((ResultMatcher) jsonPath("$[0].id", is(booking.getId()), Long.class))
-                .andExpect((ResultMatcher) jsonPath("$[0].status", is(booking.getStatus().name())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$[0].status", is(booking.getStatus().name())));
     }
 }
