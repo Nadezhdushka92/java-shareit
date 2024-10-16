@@ -38,4 +38,5 @@ public class UserController {
     public UserDto updateUserById(@RequestBody UpdateUserRqDto userDto, @PathVariable("id") Long userId) {
         return userService.updateUserById(userId, userDto);
     }
+
 }

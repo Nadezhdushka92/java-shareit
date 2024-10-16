@@ -20,9 +20,9 @@ public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 2000)
+    @Column(name = "description", nullable = false)
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
     @Column(name = "created", nullable = false)
