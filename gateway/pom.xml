@@ -9,7 +9,9 @@
     </parent>
 
     <artifactId>shareit-gateway</artifactId>
-    <name>Shareit Gateway</name>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>ShareIt Gateway</name>
 
     <dependencies>
         <dependency>
