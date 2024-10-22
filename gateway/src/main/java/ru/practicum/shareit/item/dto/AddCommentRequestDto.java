@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto.comment;
+package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCommentDto {
+public class AddCommentRequestDto {
     @NotBlank(message = "Текст комментария не может быть пустым")
     private String text;
 }

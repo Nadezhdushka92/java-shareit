@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UpdateItemDto {
+public class UpdateItemRequestDto {
     private String name;
     private String description;
     private Boolean available;

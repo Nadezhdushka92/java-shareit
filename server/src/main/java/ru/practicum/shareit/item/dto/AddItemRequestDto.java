@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddItemDto {
+public class AddItemRequestDto {
     private String name;
     private String description;
     private Boolean available;

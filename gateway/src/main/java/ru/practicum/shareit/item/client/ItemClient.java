@@ -8,8 +8,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.BaseClient;
-import ru.practicum.shareit.item.dto.AddCommentDto;
-import ru.practicum.shareit.item.dto.AddRequestDto;
+import ru.practicum.shareit.item.dto.AddCommentRequestDto;
+import ru.practicum.shareit.item.dto.AddItemRequestDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 
 import java.util.Map;
@@ -25,7 +25,7 @@ public class ItemClient extends BaseClient {
                 .build());
     }
 
-    public ResponseEntity<Object> addNewItem(Long userId, AddRequestDto newItemDto) {
+    public ResponseEntity<Object> addNewItem(Long userId, AddItemRequestDto newItemDto) {
         return post("", userId, newItemDto);
     }
 
@@ -46,7 +46,7 @@ public class ItemClient extends BaseClient {
         return patch("/" + itemId, userId, itemDto);
     }
 
-    public ResponseEntity<Object> addNewComment(Long userId, Long itemId, AddCommentDto commentDto) {
+    public ResponseEntity<Object> addNewComment(Long userId, Long itemId, AddCommentRequestDto commentDto) {
         Map<String, Object> parameters = Map.of("itemId", itemId);
         return post("/{itemId}/comment", userId, parameters, commentDto);
     }

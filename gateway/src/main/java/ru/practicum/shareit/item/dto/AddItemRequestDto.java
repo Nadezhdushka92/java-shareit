@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddRequestDto {
+public class AddItemRequestDto {
     @NotBlank(message = "Наименование не может быть пустым")
     private String name;
     @NotBlank(message = "Описание не может быть пустым")

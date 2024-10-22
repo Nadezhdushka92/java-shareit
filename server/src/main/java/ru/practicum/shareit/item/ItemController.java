@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.item.dto.*;
-import ru.practicum.shareit.item.dto.comment.AddCommentDto;
+import ru.practicum.shareit.item.dto.comment.AddCommentRequestDto;
 import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -25,7 +25,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody AddItemDto itemDto) {
+    public ItemDto addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody AddItemRequestDto itemDto) {
         return itemService.addNewItem(userId, itemDto);
     }
 
@@ -48,14 +48,14 @@ public class ItemController {
     @PatchMapping("/{id}")
     public ItemDto updateItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                   @PathVariable("id") Long itemId,
-                                  @RequestBody UpdateItemDto itemDto) {
+                                  @RequestBody UpdateItemRequestDto itemDto) {
         return itemService.updateItemById(userId, itemId, itemDto);
     }
 
     @PostMapping("/{id}/comment")
     public CommentDto addNewComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                     @PathVariable("id") Long itemId,
-                                    @RequestBody AddCommentDto commentDto) {
+                                    @RequestBody AddCommentRequestDto commentDto) {
         return itemService.addNewComment(userId, itemId, commentDto);
     }
 

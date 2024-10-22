@@ -14,9 +14,9 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.ErrorHandler;
-import ru.practicum.shareit.item.dto.AddItemDto;
-import ru.practicum.shareit.item.dto.UpdateItemDto;
-import ru.practicum.shareit.item.dto.comment.AddCommentDto;
+import ru.practicum.shareit.item.dto.AddItemRequestDto;
+import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
+import ru.practicum.shareit.item.dto.comment.AddCommentRequestDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.comment.Comment;
 import ru.practicum.shareit.item.repository.CommentRepository;
@@ -109,7 +109,7 @@ public class ItemControllerTest {
         when(requestRepository.findById(any())).thenReturn(Optional.of(request));
         when(itemRepository.save(any())).thenReturn(item);
 
-        AddItemDto itemDto = new AddItemDto(item.getName(),
+        AddItemRequestDto itemDto = new AddItemRequestDto(item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 request.getId());
@@ -180,7 +180,7 @@ public class ItemControllerTest {
 
     @Test
     void updateItemById() throws Exception {
-        UpdateItemDto updateItemDto = new UpdateItemDto("Updated Item", "Updated description", true);
+        UpdateItemRequestDto updateItemDto = new UpdateItemRequestDto("Updated Item", "Updated description", true);
         Item updatedItem = new Item(1L,
                 updateItemDto.getName(),
                 updateItemDto.getDescription(),
@@ -204,7 +204,7 @@ public class ItemControllerTest {
 
     @Test
     void addNewComment() throws Exception {
-        AddCommentDto addCommentRqDto = new AddCommentDto("Comment");
+        AddCommentRequestDto addCommentRqDto = new AddCommentRequestDto("Comment");
         when(bookingRepository.findByBookerIdAndItemIdAndStatusAndEndBefore(any(),
                 any(),
                 any(),

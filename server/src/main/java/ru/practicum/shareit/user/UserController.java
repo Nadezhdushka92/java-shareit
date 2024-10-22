@@ -2,7 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.UpdateUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserRequestDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUserById(@RequestBody UpdateUserDto userDto, @PathVariable("id") Long userId) {
+    public UserDto updateUserById(@RequestBody UpdateUserRequestDto userDto, @PathVariable("id") Long userId) {
         return userService.updateUserById(userId, userDto);
     }
 

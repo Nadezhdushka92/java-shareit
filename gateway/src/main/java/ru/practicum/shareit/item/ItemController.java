@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
-import ru.practicum.shareit.item.dto.AddCommentDto;
-import ru.practicum.shareit.item.dto.AddRequestDto;
+import ru.practicum.shareit.item.dto.AddCommentRequestDto;
+import ru.practicum.shareit.item.dto.AddItemRequestDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 
 @Controller
@@ -21,7 +21,7 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid AddRequestDto newItemDto) {
+    public ResponseEntity<Object> addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid AddItemRequestDto newItemDto) {
         return itemClient.addNewItem(userId, newItemDto);
     }
 
@@ -51,7 +51,7 @@ public class ItemController {
     @PostMapping("/{id}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @PathVariable("id") Long itemId,
-                                             @RequestBody @Valid AddCommentDto commentDto) {
+                                             @RequestBody @Valid AddCommentRequestDto commentDto) {
         return itemClient.addNewComment(userId, itemId, commentDto);
     }
 }
