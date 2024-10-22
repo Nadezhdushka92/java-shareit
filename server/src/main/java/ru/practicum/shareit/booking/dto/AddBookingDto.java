@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class AddBookingRqDto {
+public class AddBookingDto {
     private LocalDateTime start;
     private LocalDateTime end;
     private Long itemId;

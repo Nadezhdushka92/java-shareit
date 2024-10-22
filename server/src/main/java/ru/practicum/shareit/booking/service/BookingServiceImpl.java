@@ -3,7 +3,7 @@ package ru.practicum.shareit.booking.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.AddBookingRqDto;
+import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
@@ -30,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingDto addNewBooking(Long bookerId, AddBookingRqDto newBookingDto) {
+    public BookingDto addNewBooking(Long bookerId, AddBookingDto newBookingDto) {
         Item item = itemRepository.findByIdAndOwnerIdNot(newBookingDto.getItemId(), bookerId)
                 .orElseThrow(() -> new NotFoundException("Не найдена вещь с id = " +
                                                          newBookingDto.getItemId() +

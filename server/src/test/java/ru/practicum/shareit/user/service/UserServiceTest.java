@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.user.dto.UpdateUserRqDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -62,7 +62,7 @@ public class UserServiceTest {
         em.flush();
 
         // when
-        UpdateUserRqDto updateUserRqDto = new UpdateUserRqDto("Иван Иван", "Ivanov@mail.com");
+        UpdateUserDto updateUserRqDto = new UpdateUserDto("Иван Иван", "Ivanov@mail.com");
         service.updateUserById(entity.getId(), updateUserRqDto);
 
         // then

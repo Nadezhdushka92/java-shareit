@@ -11,11 +11,11 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.dto.AddItemRqDto;
+import ru.practicum.shareit.item.dto.AddItemDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithRelatedDataDto;
-import ru.practicum.shareit.item.dto.UpdateItemRqDto;
-import ru.practicum.shareit.item.dto.comment.AddCommentRqDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.comment.AddCommentDto;
 import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.dto.comment.CommentMapper;
 import ru.practicum.shareit.item.dto.mapper.ItemMapper;
@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto addNewItem(Long ownerId, AddItemRqDto itemDto) {
+    public ItemDto addNewItem(Long ownerId, AddItemDto itemDto) {
         User user = userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id = " + ownerId));
 
@@ -64,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto updateItemById(Long ownerId, Long itemId, UpdateItemRqDto updateItemDto) {
+    public ItemDto updateItemById(Long ownerId, Long itemId, UpdateItemDto updateItemDto) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Не найдена вещь id = " + itemId));
 
@@ -142,7 +142,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public CommentDto addNewComment(Long userId, Long itemId, AddCommentRqDto commentDto) {
+    public CommentDto addNewComment(Long userId, Long itemId, AddCommentDto commentDto) {
         List<Booking> bookings = bookingRepository.findByBookerIdAndItemIdAndStatusAndEndBefore(userId,
                 itemId,
                 BookingStatus.APPROVED,

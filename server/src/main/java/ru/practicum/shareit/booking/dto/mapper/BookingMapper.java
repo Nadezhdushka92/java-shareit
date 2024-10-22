@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.dto.mapper;
 
-import ru.practicum.shareit.booking.dto.AddBookingRqDto;
+import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.dto.BookingBasicInfoDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookingMapper {
-    public static Booking mapToBooking(User booker, Item item, AddBookingRqDto newBookingDto) {
+    public static Booking mapToBooking(User booker, Item item, AddBookingDto newBookingDto) {
         return new Booking(null, newBookingDto.getStart(), newBookingDto.getEnd(), BookingStatus.WAITING, booker, item);
     }
 

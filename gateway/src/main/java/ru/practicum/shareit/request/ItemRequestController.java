@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.shareit.request.client.ItemRequestClient;
-import ru.practicum.shareit.request.dto.AddItemRequestRqDto;
+import ru.practicum.shareit.request.dto.AddItemRequestDto;
 
 @Controller
 @RequestMapping(path = "/requests")
@@ -28,7 +28,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<Object> addNewItemRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                    @RequestBody @Valid AddItemRequestRqDto newItemRequestDto) {
+                                                    @RequestBody @Valid AddItemRequestDto newItemRequestDto) {
         return requestClient.addNewItemRequest(userId, newItemRequestDto);
     }
 

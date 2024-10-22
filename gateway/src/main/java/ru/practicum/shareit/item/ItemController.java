@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
-import ru.practicum.shareit.item.dto.AddCommentRqDto;
-import ru.practicum.shareit.item.dto.AddItemRqDto;
-import ru.practicum.shareit.item.dto.UpdateItemRqDto;
+import ru.practicum.shareit.item.dto.AddCommentDto;
+import ru.practicum.shareit.item.dto.AddRequestDto;
+import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 
 @Controller
 @RequestMapping(path = "/items")
@@ -21,7 +21,7 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid AddItemRqDto newItemDto) {
+    public ResponseEntity<Object> addNewItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid AddRequestDto newItemDto) {
         return itemClient.addNewItem(userId, newItemDto);
     }
 
@@ -44,14 +44,14 @@ public class ItemController {
     @PatchMapping("/{id}")
     public ResponseEntity<Object> updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @PathVariable("id") Long itemId,
-                                             @RequestBody @Valid UpdateItemRqDto itemDto) {
+                                             @RequestBody @Valid UpdateItemRequestDto itemDto) {
         return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @PostMapping("/{id}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader("X-Sharer-User-Id") Long userId,
                                              @PathVariable("id") Long itemId,
-                                             @RequestBody @Valid AddCommentRqDto commentDto) {
+                                             @RequestBody @Valid AddCommentDto commentDto) {
         return itemClient.addNewComment(userId, itemId, commentDto);
     }
 }

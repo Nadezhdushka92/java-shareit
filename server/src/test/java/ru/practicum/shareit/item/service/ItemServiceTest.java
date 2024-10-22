@@ -10,11 +10,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.dto.AddItemRqDto;
+import ru.practicum.shareit.item.dto.AddItemDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithRelatedDataDto;
-import ru.practicum.shareit.item.dto.UpdateItemRqDto;
-import ru.practicum.shareit.item.dto.comment.AddCommentRqDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.comment.AddCommentDto;
 import ru.practicum.shareit.item.dto.comment.CommentDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -63,7 +63,7 @@ public class ItemServiceTest {
     @Test
     void addNewItem() {
         // given
-        AddItemRqDto itemDto = new AddItemRqDto("Item1", "Description 1", true, request.getId());
+        AddItemDto itemDto = new AddItemDto("Item1", "Description 1", true, request.getId());
         // when
         ItemDto savedDto = service.addNewItem(owner.getId(), itemDto);
         // then
@@ -78,10 +78,10 @@ public class ItemServiceTest {
     @Test
     void updateItemById() {
         // given
-        AddItemRqDto itemDto = new AddItemRqDto("Item1", "Description 1", true, request.getId());
+        AddItemDto itemDto = new AddItemDto("Item1", "Description 1", true, request.getId());
         ItemDto savedDto = service.addNewItem(owner.getId(), itemDto);
         // when
-        UpdateItemRqDto updateItemRqDto = new UpdateItemRqDto("Updated Item1", "Updated Description 1", false);
+        UpdateItemDto updateItemRqDto = new UpdateItemDto("Updated Item1", "Updated Description 1", false);
         ItemDto updatedItem = service.updateItemById(owner.getId(), savedDto.getId(), updateItemRqDto);
         // then
         assertThat(updatedItem.getId(), notNullValue());
@@ -95,7 +95,7 @@ public class ItemServiceTest {
     @Test
     void findById() {
         // given
-        AddItemRqDto itemDto = new AddItemRqDto("Item1", "Description 1", true, request.getId());
+        AddItemDto itemDto = new AddItemDto("Item1", "Description 1", true, request.getId());
         ItemDto savedDto = service.addNewItem(owner.getId(), itemDto);
         // when
         ItemWithRelatedDataDto foundDto = service.findById(owner.getId(), savedDto.getId());
@@ -111,7 +111,7 @@ public class ItemServiceTest {
     @Test
     void findAllWithRelatedDataByOwner() {
         // given
-        AddItemRqDto itemDto = new AddItemRqDto("Item1", "Description 1", true, request.getId());
+        AddItemDto itemDto = new AddItemDto("Item1", "Description 1", true, request.getId());
         service.addNewItem(owner.getId(), itemDto);
         // when
         List<ItemWithRelatedDataDto> foundDto = service.findAllWithRelatedDataByOwner(owner.getId());
@@ -128,7 +128,7 @@ public class ItemServiceTest {
     @Test
     void search() {
         // given
-        AddItemRqDto itemDto = new AddItemRqDto("Item1", "Description 1", true, request.getId());
+        AddItemDto itemDto = new AddItemDto("Item1", "Description 1", true, request.getId());
         service.addNewItem(owner.getId(), itemDto);
         // when
         List<ItemDto> foundDto = service.search(owner.getId(), "DESC%1");
@@ -144,7 +144,7 @@ public class ItemServiceTest {
     @Test
     void addNewComment() {
         // when
-        AddCommentRqDto commentDto = new AddCommentRqDto("Comment 1");
+        AddCommentDto commentDto = new AddCommentDto("Comment 1");
         CommentDto savedCommentDto = service.addNewComment(booker.getId(),
                 item.getId(), commentDto);
         // then

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookItemRqDto {
+public class BookItemRequestDto {
 	@NotNull(message = "Необходимо указать id бронируемой вещи")
 	private long itemId;
 	@NotNull(message = "Необходимо задать начало периода бронирования")

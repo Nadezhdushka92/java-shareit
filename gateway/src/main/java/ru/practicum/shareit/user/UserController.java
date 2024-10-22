@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.client.UserClient;
-import ru.practicum.shareit.user.dto.AddUserRqDto;
-import ru.practicum.shareit.user.dto.UpdateUserRqDto;
+import ru.practicum.shareit.user.dto.AddUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserRequestDto;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -35,12 +35,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addNewUser(@RequestBody @Valid AddUserRqDto addUserRequestDto) {
+    public ResponseEntity<Object> addNewUser(@RequestBody @Valid AddUserDto addUserRequestDto) {
         return userClient.addNewUser(addUserRequestDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> updateUserById(@RequestBody @Valid UpdateUserRqDto userDto, @PathVariable Long id) {
+    public ResponseEntity<Object> updateUserById(@RequestBody @Valid UpdateUserRequestDto userDto, @PathVariable Long id) {
         if (userDto.allFieldsAreEmpty()) {
             throw new IllegalArgumentException("Должно быть задано хотя бы одно изменяемое поле");
         }

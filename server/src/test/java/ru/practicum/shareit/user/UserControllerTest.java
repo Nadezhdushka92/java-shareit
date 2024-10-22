@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.exception.ErrorHandler;
-import ru.practicum.shareit.user.dto.UpdateUserRqDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -72,7 +72,7 @@ public class UserControllerTest {
 
     @Test
     void updateUserById() throws Exception {
-        UpdateUserRqDto updateUserRqDto = new UpdateUserRqDto("New Name", "newmail@mail.com");
+        UpdateUserDto updateUserRqDto = new UpdateUserDto("New Name", "newmail@mail.com");
         User updatedUser = new User(1L, updateUserRqDto.getName(), updateUserRqDto.getEmail());
 
         when(repository.save(any())).thenReturn(updatedUser);
@@ -90,7 +90,7 @@ public class UserControllerTest {
 
     @Test
     void updateUserByWrongId() throws Exception {
-        UpdateUserRqDto updateUserRqDto = new UpdateUserRqDto("New Name", "newmail@mail.com");
+        UpdateUserDto updateUserRqDto = new UpdateUserDto("New Name", "newmail@mail.com");
 
         when(repository.findById(-1L)).thenReturn(Optional.empty());
 

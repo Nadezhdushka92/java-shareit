@@ -14,9 +14,9 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.ErrorHandler;
-import ru.practicum.shareit.item.dto.AddItemRqDto;
-import ru.practicum.shareit.item.dto.UpdateItemRqDto;
-import ru.practicum.shareit.item.dto.comment.AddCommentRqDto;
+import ru.practicum.shareit.item.dto.AddItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.comment.AddCommentDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.comment.Comment;
 import ru.practicum.shareit.item.repository.CommentRepository;
@@ -109,7 +109,7 @@ public class ItemControllerTest {
         when(requestRepository.findById(any())).thenReturn(Optional.of(request));
         when(itemRepository.save(any())).thenReturn(item);
 
-        AddItemRqDto itemDto = new AddItemRqDto(item.getName(),
+        AddItemDto itemDto = new AddItemDto(item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 request.getId());
@@ -180,7 +180,7 @@ public class ItemControllerTest {
 
     @Test
     void updateItemById() throws Exception {
-        UpdateItemRqDto updateItemDto = new UpdateItemRqDto("Updated Item", "Updated description", true);
+        UpdateItemDto updateItemDto = new UpdateItemDto("Updated Item", "Updated description", true);
         Item updatedItem = new Item(1L,
                 updateItemDto.getName(),
                 updateItemDto.getDescription(),
@@ -204,7 +204,7 @@ public class ItemControllerTest {
 
     @Test
     void addNewComment() throws Exception {
-        AddCommentRqDto addCommentRqDto = new AddCommentRqDto("Comment");
+        AddCommentDto addCommentRqDto = new AddCommentDto("Comment");
         when(bookingRepository.findByBookerIdAndItemIdAndStatusAndEndBefore(any(),
                 any(),
                 any(),

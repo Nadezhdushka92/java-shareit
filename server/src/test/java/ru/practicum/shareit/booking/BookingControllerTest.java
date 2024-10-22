@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.practicum.shareit.booking.dto.AddBookingRqDto;
+import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -89,7 +89,7 @@ public class BookingControllerTest {
         when(bookingRepository.findByItemIdAndActiveInPeriod(any(), any(), any())).thenReturn(new ArrayList<>());
         when(bookingRepository.save(any())).thenReturn(booking);
 
-        AddBookingRqDto bookingDto = new AddBookingRqDto(LocalDateTime.now().minusDays(2),
+        AddBookingDto bookingDto = new AddBookingDto(LocalDateTime.now().minusDays(2),
                 LocalDateTime.now().minusDays(1),
                 item.getId());
 
